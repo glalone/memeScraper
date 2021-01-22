@@ -1,34 +1,6 @@
-// const request = require('request');
-
-// request(
-//   'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
-//   { json: true },
-//   (err, res, body) => {
-//     if (err) {
-//       return console.log(err);
-//     }
-//     console.log(body.url);
-//     console.log(body.explanation);
-//   },
-// );
-
-const https = require('https');
 const axios = require('axios');
 var fs = require('fs');
 const download = require('images-downloader').images;
-// https
-//   .get('https://memegen-link-examples-upleveled.netlify.app/', (resp) => {
-//     let body = [];
-// request.on('data', (chunk) => {
-//   body.push(chunk);
-// }).on('end', () => {
-//   body = Buffer.concat(body).toString();
-//   // at this point, `body` has the entire request body stored in it as a string
-// )}
-//   }
-//   );
-
-// -------
 
 const getHTML = async (pageUrl) => {
   // go to the page, return a string of the html
@@ -40,9 +12,8 @@ const getHTML = async (pageUrl) => {
   }
 };
 
-// could delete try & catch part
-
 const searchHTMLForImages = async (htmlString) => {
+  // filtering urls to an array
   let m;
   const urls = [];
   const str = htmlString;
@@ -63,27 +34,8 @@ const createFolder = (folderName) => {
   }
 };
 
-// const download = (imgURL, folderName, i) => {
-//   var url = imgURL,
-//     Stream = require('stream').Transform,
-//     fs = require('fs');
-
-//   https
-//     .request(url, function (response) {
-//       var data = new Stream();
-
-//       response.on('data', function (chunk) {
-//         data.push(chunk);
-//       });
-
-//       response.on('end', function () {
-//         fs.writeFileSync(`./${folderName}/image-${i}.jpg`, data.read());
-//       });
-//     })
-//     .end();
-// };
-
 const getImagesAndMoveToFolder = async (imgArr, folderName) => {
+  // downloading img's do folder with package
   download(imgArr.slice(0, 10), `./${folderName}`)
     .then((result) => {
       console.log('Images downloaded', result);
@@ -93,20 +45,15 @@ const getImagesAndMoveToFolder = async (imgArr, folderName) => {
 
 const go = async (srcURL, folderName) => {
   const htmlResult = await getHTML(srcURL);
+  // go to the page, return a string of the html
   //console.log('htmlResult', htmlResult);
   const imageArr = await searchHTMLForImages(htmlResult);
+  // filtering image-urls to an array
   console.log(imageArr);
   await createFolder(folderName);
+  // check if folder exists,  it does dont create a new one
   return getImagesAndMoveToFolder(imageArr, folderName);
+  // downloading img's do folder
 };
-
-// const f = ({ name, age }) => {
-//   //
-// };
-
-// f({
-//   name: "jim",
-//   age:10
-// })
 
 go('https://memegen-link-examples-upleveled.netlify.app', 'memes');
