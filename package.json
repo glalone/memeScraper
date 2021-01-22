@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "images-downloader": "^1.0.3",
-    "request": "^2.81.0"
+    "images-downloader": "^1.0.3"
   }
 }
