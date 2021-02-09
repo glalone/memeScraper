@@ -16,10 +16,10 @@ const searchHTMLForImages = async (htmlString) => {
   // filtering urls to an array
   let m;
   const urls = [];
-  const str = htmlString;
+  // const str = htmlString;
   const rex = /<img[^>]+src="?([^"\s]+)"?\s*\/>/g;
 
-  while ((m = rex.exec(str))) {
+  while ((m = rex.exec(htmlString))) {
     urls.push(m[1]);
   }
 
@@ -37,19 +37,19 @@ const createFolder = (folderName) => {
 const getImagesAndMoveToFolder = async (imgArr, folderName) => {
   // downloading img's do folder with package
   download(imgArr.slice(0, 10), `./${folderName}`)
-    .then((result) => {
-      console.log('Images downloaded', result);
-    })
+    // .then((result) => {
+    //   console.log('Images downloaded', result);
+    // }) deleted for cleaner output of the app
     .catch((error) => console.log('downloaded error', error));
 };
 
 const go = async (srcURL, folderName) => {
   const htmlResult = await getHTML(srcURL);
   // go to the page, return a string of the html
-  //console.log('htmlResult', htmlResult);
+  // console.log('htmlResult', htmlResult);
   const imageArr = await searchHTMLForImages(htmlResult);
   // filtering image-urls to an array
-  console.log(imageArr);
+  // deleted console.log(imageArr); for cleaner output of the app
   await createFolder(folderName);
   // check if folder exists,  it does dont create a new one
   return getImagesAndMoveToFolder(imageArr, folderName);

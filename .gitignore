@@ -4,4 +4,5 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 memes
-package-lock.json
+package-lock.json.eslintcache
+.eslintcache
