@@ -16,7 +16,6 @@ const searchHTMLForImages = async (htmlString) => {
   // filtering urls to an array
   let m;
   const urls = [];
-  // const str = htmlString;
   const rex = /<img[^>]+src="?([^"\s]+)"?\s*\/>/g;
 
   while ((m = rex.exec(htmlString))) {
@@ -31,29 +30,33 @@ const createFolder = (folderName) => {
 
   if (!fs.existsSync('./' + folderName)) {
     fs.mkdirSync('./' + folderName);
+    console.log('Folder created');
+    return;
   }
+  console.log('Folder already exists');
 };
 
-const getImagesAndMoveToFolder = async (imgArr, folderName) => {
+const getImagesAndMoveToFolder = async (
+  imgArr,
+  folderName,
+  imageAmount = 10,
+) => {
   // downloading img's do folder with package
-  download(imgArr.slice(0, 10), `./${folderName}`)
-    // .then((result) => {
-    //   console.log('Images downloaded', result);
-    // }) deleted for cleaner output of the app
-    .catch((error) => console.log('downloaded error', error));
+  download(imgArr.slice(0, imageAmount), `./${folderName}`).catch((error) =>
+    console.log('downloaded error', error),
+  );
+  console.log('Download succesful');
 };
 
-const go = async (srcURL, folderName) => {
+const go = async (srcURL, folderName, imageAmount) => {
   const htmlResult = await getHTML(srcURL);
   // go to the page, return a string of the html
-  // console.log('htmlResult', htmlResult);
   const imageArr = await searchHTMLForImages(htmlResult);
   // filtering image-urls to an array
-  // deleted console.log(imageArr); for cleaner output of the app
-  await createFolder(folderName);
+  createFolder(folderName);
   // check if folder exists,  it does dont create a new one
-  return getImagesAndMoveToFolder(imageArr, folderName);
+  return getImagesAndMoveToFolder(imageArr, folderName, imageAmount);
   // downloading img's do folder
 };
 
-go('https://memegen-link-examples-upleveled.netlify.app', 'memes');
+go('https://memegen-link-examples-upleveled.netlify.app', 'memes', 10);
